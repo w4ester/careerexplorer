@@ -1,64 +1,116 @@
-// API configuration
-const API_CONFIG = {
-  ONET: {
-    BASE_URL: 'https://services.onetcenter.org/ws/online/occupations',
-    API_KEY: process.env.ONET_API_KEY
-  },
-  BLS: {
-    BASE_URL: 'https://api.bls.gov/publicAPI/v2',
-    API_KEY: process.env.BLS_API_KEY
-  },
-  CAREER_ONESTOP: {
-    BASE_URL: 'https://api.careeronestop.org/v1',
-    API_KEY: process.env.CAREER_ONESTOP_API_KEY
-  }
-};
+// DataUSA API service
+const DATA_USA_BASE_URL = 'https://datausa.io/api';
 
-export const fetchONETData = async (socCode) => {
+export const searchOccupations = async (query) => {
   try {
-    const response = await fetch(`${API_CONFIG.ONET.BASE_URL}/${socCode}`, {
-      headers: {
-        Authorization: `Bearer ${API_CONFIG.ONET.API_KEY}`
-      }
-    });
-    return await response.json();
+    const response = await fetch(`${DATA_USA_BASE_URL}/data?soc=occupations&measure=Total%20Population,Average%20Wage&year=latest`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return filterOccupations(data.data, query);
   } catch (error) {
-    console.error('Error fetching ONET data:', error);
-    return null;
+    console.error('Error fetching occupations:', error);
+    throw error;
   }
 };
 
-export const fetchBLSData = async (socCode) => {
+export const fetchOccupationDetails = async (socCode) => {
   try {
-    const response = await fetch(`${API_CONFIG.BLS.BASE_URL}/timeseries/data/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Registration-Key': API_CONFIG.BLS_API_KEY
+    const response = await fetch(`${DATA_USA_BASE_URL}/data?soc=${socCode}&measure=Total%20Population,Average%20Wage,Average%20Age&year=latest`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return processOccupationData(data.data[0]);
+  } catch (error) {
+    console.error('Error fetching occupation details:', error);
+    throw error;
+  }
+};
+
+// Helper function to filter occupations based on search query
+const filterOccupations = (data, query) => {
+  if (!query) return data;
+  const lowerQuery = query.toLowerCase();
+  return data.filter(occ => 
+    occ.occupation_title?.toLowerCase().includes(lowerQuery) ||
+    occ.occupation_description?.toLowerCase().includes(lowerQuery)
+  );
+};
+
+// Helper function to process occupation data
+const processOccupationData = (rawData) => {
+  return {
+    title: rawData.occupation_title,
+    description: rawData.occupation_description || 'Description not available',
+    averageWage: rawData['Average Wage'],
+    totalEmployed: rawData['Total Population'],
+    skills: getDefaultSkills(rawData.occupation_title),
+    education: getDefaultEducation(),
+    outlook: getDefaultOutlook()
+  };
+};
+
+// Helper function to provide default skills based on occupation
+const getDefaultSkills = (occupationTitle) => {
+  // We'll provide some generic skills that are relevant to most green jobs
+  return [
+    {
+      name: 'Problem Solving',
+      level: 'Advanced',
+      description: 'Identifying complex problems and reviewing related information to develop and evaluate options.'
+    },
+    {
+      name: 'Technical Knowledge',
+      level: 'Intermediate',
+      description: 'Understanding and applying technical principles and methods.'
+    },
+    {
+      name: 'Environmental Awareness',
+      level: 'Advanced',
+      description: 'Understanding environmental regulations and sustainability practices.'
+    },
+    {
+      name: 'Communication',
+      level: 'Intermediate',
+      description: 'Effectively conveying information and ideas in written and verbal form.'
+    },
+    {
+      name: 'Project Management',
+      level: 'Intermediate',
+      description: 'Planning, organizing, and overseeing projects to achieve specific goals.'
+    }
+  ];
+};
+
+// Helper function to provide default education requirements
+const getDefaultEducation = () => {
+  return {
+    minimum: "Bachelor's Degree",
+    preferred: "Master's Degree",
+    alternatives: [
+      {
+        name: 'Technical Certification',
+        duration: '6-12 months',
+        type: 'Certification'
       },
-      body: JSON.stringify({
-        seriesid: [`OEUS${socCode}000000000000003`],
-        startyear: '2020',
-        endyear: '2024'
-      })
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching BLS data:', error);
-    return null;
-  }
+      {
+        name: 'Associate Degree',
+        duration: '2 years',
+        type: 'Degree'
+      }
+    ]
+  };
 };
 
-export const fetchCareerOneStopData = async (socCode) => {
-  try {
-    const response = await fetch(`${API_CONFIG.CAREER_ONESTOP.BASE_URL}/occupation/${socCode}`, {
-      headers: {
-        Authorization: `Bearer ${API_CONFIG.CAREER_ONESTOP.API_KEY}`
-      }
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching CareerOneStop data:', error);
-    return null;
-  }
+// Helper function to provide default job outlook
+const getDefaultOutlook = () => {
+  return {
+    growth: '8%',
+    outlook: 'Growing faster than average',
+    period: '2023-2033',
+    opportunities: [
+      'Increasing focus on sustainability',
+      'Government environmental regulations',
+      'Growing demand for renewable energy',
+      'Corporate environmental responsibility'
+    ]
+  };
 };
