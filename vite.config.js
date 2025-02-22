@@ -20,8 +20,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        manualChunks: {
+          'recharts': ['recharts'],
+          'react-vendor': ['react', 'react-dom'],
+          'ui-components': ['@radix-ui/react-alert-dialog', '@radix-ui/react-slot', '@radix-ui/react-tabs']
+        }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })
