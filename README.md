@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-# careerexplorer
+## careerexplorer
 =======
-# Environmental Careers Explorer
+## Environmental Careers Explorer
 
 A web application that connects environmental literacy in schools with green careers by analyzing climate action plans and mapping them to Department of Labor Standard Occupation Codes (SOCs).
 
