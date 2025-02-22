@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Search, Book, ArrowRight, GraduationCap } from 'lucide-react';
 import CareerSimulator from './CareerSimulator';
 import OccupationDetails from './OccupationDetails';
-import { searchOccupations } from '../services/onetApi';
+import { searchOccupations } from '../services/careerApi'; // Fixed import path
 
 export const EnhancedSOCExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
