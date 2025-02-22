@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Briefcase, GraduationCap, Search, Book } from 'lucide-react';
-import { ClimateActionAnalyzer } from '../ClimateActionAnalyzer';
+import { FileText, Briefcase, GraduationCap } from 'lucide-react';
+import { ClimateActionAnalyzer } from './components/ClimateActionAnalyzer';
 import { EnhancedSOCExplorer } from './components/EnhancedSOCExplorer';
 
 const App = () => {
+  const [selectedSOC, setSelectedSOC] = useState(null);
+  const [activeTab, setActiveTab] = useState('climate');
+
+  // Handler for when a job is selected from climate initiatives
+  const handleJobSelect = (socCode) => {
+    setSelectedSOC(socCode);
+    setActiveTab('careers'); // Switch to careers tab when job is selected
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -30,7 +39,11 @@ const App = () => {
           </AlertDescription>
         </Alert>
 
-        <Tabs defaultValue="climate" className="space-y-8">
+        <Tabs 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="space-y-8"
+        >
           <TabsList className="grid grid-cols-2 w-full max-w-md">
             <TabsTrigger value="climate" className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
@@ -43,11 +56,14 @@ const App = () => {
           </TabsList>
 
           <TabsContent value="climate" className="space-y-6">
-            <ClimateActionAnalyzer />
+            <ClimateActionAnalyzer onJobSelect={handleJobSelect} />
           </TabsContent>
 
           <TabsContent value="careers" className="space-y-6">
-            <EnhancedSOCExplorer />
+            <EnhancedSOCExplorer 
+              initialSOC={selectedSOC}
+              onSOCChange={setSelectedSOC}
+            />
           </TabsContent>
         </Tabs>
 
