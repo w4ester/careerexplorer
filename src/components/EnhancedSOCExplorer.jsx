@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Book, ArrowRight, GraduationCap } from 'lucide-react';
+import { Search, Book, ArrowRight } from 'lucide-react';
 import CareerSimulator from './CareerSimulator';
 import OccupationDetails from './OccupationDetails';
-import { searchOccupations } from '../services/careerApi'; // Fixed import path
+import CareerPathway from './CareerPathway';
+import CertificationExplorer from './CertificationExplorer';
+import { searchOccupations } from '../services/careerApi';
 
 export const EnhancedSOCExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -84,54 +86,23 @@ export const EnhancedSOCExplorer = () => {
         {selectedSOC && (
           <div className="space-y-6">
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid grid-cols-3 w-full">
-                <TabsTrigger value="details">Details</TabsTrigger>
-                <TabsTrigger value="education">Education</TabsTrigger>
-                <TabsTrigger value="simulator">Career Simulator</TabsTrigger>
+              <TabsList className="grid grid-cols-4 w-full">
+                <TabsTrigger value="details">Overview</TabsTrigger>
+                <TabsTrigger value="pathway">Career Path</TabsTrigger>
+                <TabsTrigger value="certifications">Certifications</TabsTrigger>
+                <TabsTrigger value="simulator">Simulator</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details">
                 <OccupationDetails socCode={selectedSOC.code} />
               </TabsContent>
 
-              <TabsContent value="education">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Education Pathways</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="border rounded p-4">
-                        <h3 className="font-semibold">Traditional Path</h3>
-                        <p className="text-sm text-gray-600">
-                          4-year degree program with comprehensive training
-                        </p>
-                        <div className="mt-2">
-                          <h4 className="text-sm font-medium">Key Benefits:</h4>
-                          <ul className="mt-1 text-sm text-gray-600">
-                            <li>• Comprehensive theoretical knowledge</li>
-                            <li>• Research opportunities</li>
-                            <li>• Network building</li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="border rounded p-4">
-                        <h3 className="font-semibold">Accelerated Path</h3>
-                        <p className="text-sm text-gray-600">
-                          Fast-track certification program
-                        </p>
-                        <div className="mt-2">
-                          <h4 className="text-sm font-medium">Key Benefits:</h4>
-                          <ul className="mt-1 text-sm text-gray-600">
-                            <li>• Faster entry into workforce</li>
-                            <li>• Lower initial cost</li>
-                            <li>• Focused practical skills</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <TabsContent value="pathway">
+                <CareerPathway careerPath={selectedSOC.careerPath} />
+              </TabsContent>
+
+              <TabsContent value="certifications">
+                <CertificationExplorer certifications={selectedSOC.certifications} />
               </TabsContent>
 
               <TabsContent value="simulator">
@@ -141,6 +112,45 @@ export const EnhancedSOCExplorer = () => {
           </div>
         )}
       </div>
+
+      {/* Bottom Section - Featured Content */}
+      {!selectedSOC && (
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">Featured Green Careers</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">Solar Energy</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Explore careers in solar installation, design, and project management.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">Wind Power</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Discover opportunities in wind turbine technology and maintenance.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-lg">Urban Forestry</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Learn about careers in urban forest management and conservation.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
