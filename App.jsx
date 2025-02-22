@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Briefcase, GraduationCap, Search, Book, ArrowRight } from 'lucide-react';
+import { FileText, Briefcase, GraduationCap, Search, Book } from 'lucide-react';
 import { ClimateActionAnalyzer } from './ClimateActionAnalyzer';
-import { SOCExplorer } from './SOCExplorer';
+import { EnhancedSOCExplorer } from './src/components/EnhancedSOCExplorer';
 
 const App = () => {
   return (
@@ -25,8 +25,8 @@ const App = () => {
           <AlertTitle>Getting Started</AlertTitle>
           <AlertDescription>
             Explore climate action initiatives, discover related career opportunities, 
-            and learn about required skills and education pathways. Use the tabs below 
-            to navigate between different sections.
+            and simulate different career paths to understand potential returns on investment.
+            Use the tabs below to navigate between different sections.
           </AlertDescription>
         </Alert>
 
@@ -47,7 +47,7 @@ const App = () => {
           </TabsContent>
 
           <TabsContent value="careers" className="space-y-6">
-            <SOCExplorer />
+            <EnhancedSOCExplorer />
           </TabsContent>
         </Tabs>
 
