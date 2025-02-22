@@ -1,21 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import terser from '@rollup/plugin-terser'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    terser()
-  ],
+  plugins: [react()],
   base: '/careerexplorer/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: '127.0.0.1',
+    cors: false,
+    hmr: {
+      host: '127.0.0.1'
+    }
+  },
   build: {
-    minify: 'terser',
     rollupOptions: {
       output: {
         manualChunks: undefined
