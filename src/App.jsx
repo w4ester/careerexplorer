@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Briefcase, GraduationCap } from 'lucide-react';
+import { FileText, Briefcase, GraduationCap, ExternalLink } from 'lucide-react';
 import { ClimateActionAnalyzer } from './components/ClimateActionAnalyzer';
 import { EnhancedSOCExplorer } from './components/EnhancedSOCExplorer';
 
@@ -14,6 +14,51 @@ const App = () => {
   const handleJobSelect = (socCode) => {
     setSelectedSOC(socCode);
     setActiveTab('careers'); // Switch to careers tab when job is selected
+  };
+
+  const resources = {
+    climatePlans: [
+      {
+        title: "State Climate Action Plans",
+        url: "https://www.c2es.org/content/state-climate-action-plans/"
+      },
+      {
+        title: "EPA Climate Change Programs",
+        url: "https://www.epa.gov/climate-change"
+      },
+      {
+        title: "Conservation International Programs",
+        url: "https://www.conservation.org/programs"
+      }
+    ],
+    careerResources: [
+      {
+        title: "Environmental Career Opportunities",
+        url: "https://www.ecojobs.com/"
+      },
+      {
+        title: "Green Jobs Network",
+        url: "https://www.greenjobs.net/"
+      },
+      {
+        title: "Environmental Career Center",
+        url: "https://environmentalcareer.com/"
+      }
+    ],
+    education: [
+      {
+        title: "Environmental Certifications Guide",
+        url: "https://www.environmentalscience.org/careers/certifications"
+      },
+      {
+        title: "Green Training Programs",
+        url: "https://www.sustainable.org/education"
+      },
+      {
+        title: "Environmental Education Resources",
+        url: "https://www.epa.gov/education"
+      }
+    ]
   };
 
   return (
@@ -80,9 +125,17 @@ const App = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  <li className="text-sm">State and Local Climate Initiatives</li>
-                  <li className="text-sm">Environmental Protection Goals</li>
-                  <li className="text-sm">Conservation Programs</li>
+                  {resources.climatePlans.map((resource, index) => (
+                    <li key={index} className="text-sm">
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                        {resource.title} <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </CardContent>
             </Card>
@@ -96,9 +149,17 @@ const App = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  <li className="text-sm">Job Search Platforms</li>
-                  <li className="text-sm">Industry Associations</li>
-                  <li className="text-sm">Professional Networks</li>
+                  {resources.careerResources.map((resource, index) => (
+                    <li key={index} className="text-sm">
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                        {resource.title} <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </CardContent>
             </Card>
@@ -112,9 +173,17 @@ const App = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  <li className="text-sm">Certification Programs</li>
-                  <li className="text-sm">Training Opportunities</li>
-                  <li className="text-sm">Continuing Education</li>
+                  {resources.education.map((resource, index) => (
+                    <li key={index} className="text-sm">
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                        {resource.title} <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </CardContent>
             </Card>

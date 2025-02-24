@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Briefcase, ArrowRight, TrendingUp, Users } from 'lucide-react';
+import { FileText, Briefcase, ArrowRight, TrendingUp, Users, ChevronRight } from 'lucide-react';
 
-export const ClimateActionAnalyzer = () => {
+export const ClimateActionAnalyzer = ({ onJobSelect }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [analysis, setAnalysis] = useState(null);
 
   const initiatives = [
@@ -75,8 +76,9 @@ export const ClimateActionAnalyzer = () => {
   };
 
   const handleJobClick = (job) => {
-    // Implement further interactive actions here.
-    console.log(`Job selected: ${job.title} (SOC: ${job.socCode})`);
+    setSelectedJob(job);
+    // Pass the SOC code up to the parent component
+    onJobSelect(job.socCode);
   };
 
   return (
@@ -95,7 +97,7 @@ export const ClimateActionAnalyzer = () => {
               {initiatives.map((initiative) => (
                 <div
                   key={initiative.id}
-                  className="border rounded p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                  className={`border rounded p-4 cursor-pointer hover:bg-gray-50 transition-all duration-200 ${selectedPlan?.id === initiative.id ? 'border-blue-500 bg-blue-50' : ''}`}
                   onClick={() => analyzeInitiative(initiative)}
                 >
                   <h3 className="font-semibold">{initiative.name}</h3>
@@ -155,7 +157,7 @@ export const ClimateActionAnalyzer = () => {
                   {selectedPlan.jobs.map((job, index) => (
                     <div 
                       key={index} 
-                      className="border rounded p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                      className={`border rounded p-4 cursor-pointer hover:bg-gray-50 transition-all duration-200 ${selectedJob?.socCode === job.socCode ? 'border-green-500 bg-green-50' : ''}`}
                       onClick={() => handleJobClick(job)}
                     >
                       <div className="flex items-center justify-between">
@@ -168,18 +170,26 @@ export const ClimateActionAnalyzer = () => {
                           {job.demand} Demand
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 mt-2">SOC Code: {job.socCode}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <p className="text-sm text-gray-600">SOC Code: {job.socCode}</p>
+                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                        <p className="text-sm text-blue-600">Click to explore career details</p>
+                      </div>
                       <div className="mt-2">
                         <p className="text-sm font-medium">Required Skills:</p>
-                        <ul className="text-sm mt-1 space-y-1">
+                        <ul className="text-sm mt-1 space-y-2">
                           {job.skills.map((skill, skillIndex) => (
-                            <li key={skillIndex} className="flex items-center gap-2">
-                              <ArrowRight className="h-4 w-4" />
+                            <li 
+                              key={skillIndex} 
+                              className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1 text-gray-700"
+                            >
+                              <ArrowRight className="h-4 w-4 text-gray-500" />
                               {skill}
                             </li>
                           ))}
                         </ul>
                       </div>
+                      {selectedJob?.socCode === job.socCode && <div className="mt-3 text-sm text-green-600">Selected - View career details in the Career Explorer tab →</div>}
                     </div>
                   ))}
                 </div>

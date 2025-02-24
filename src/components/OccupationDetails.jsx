@@ -1,33 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Briefcase, Award, TrendingUp, GraduationCap } from 'lucide-react';
-import { fetchOccupationDetails } from '../services/careerApi';
 
-const OccupationDetails = ({ socCode }) => {
-  const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchOccupationDetails(socCode);
-        setDetails(data);
-      } catch (err) {
-        setError('Failed to fetch occupation data. Please try again later.');
-        console.error('Error fetching occupation data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (socCode) {
-      fetchData();
-    }
-  }, [socCode]);
+const OccupationDetails = ({ details, loading, error }) => {
 
   if (loading) {
     return <div className="animate-pulse">Loading occupation details...</div>;
@@ -60,13 +36,13 @@ const OccupationDetails = ({ socCode }) => {
               <div>
                 <h4 className="text-sm font-medium">Average Salary</h4>
                 <p className="text-lg font-semibold">
-                  ${Math.round(details?.averageWage).toLocaleString()}
+                  ${details?.meanWage?.toLocaleString() || 'N/A'}
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-medium">Total Employed</h4>
                 <p className="text-lg font-semibold">
-                  {Math.round(details?.totalEmployed).toLocaleString()}
+                  {details?.employment?.toLocaleString() || 'N/A'}
                 </p>
               </div>
             </div>
