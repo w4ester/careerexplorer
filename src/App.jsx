@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Briefcase, GraduationCap, ExternalLink } from 'lucide-react';
+import { FileText, Briefcase, GraduationCap, ExternalLink, GitBranch } from 'lucide-react';
 import { ClimateActionAnalyzer } from './components/ClimateActionAnalyzer';
 import { EnhancedSOCExplorer } from './components/EnhancedSOCExplorer';
+import { CareerPathDiagram } from './components/CareerPathDiagram';
 
 const App = () => {
   const [selectedSOC, setSelectedSOC] = useState(null);
@@ -89,7 +90,7 @@ const App = () => {
           onValueChange={setActiveTab}
           className="space-y-8"
         >
-          <TabsList className="grid grid-cols-2 w-full max-w-md">
+          <TabsList className="grid grid-cols-3 w-full max-w-2xl">
             <TabsTrigger value="climate" className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
               Climate Initiatives
@@ -97,6 +98,10 @@ const App = () => {
             <TabsTrigger value="careers" className="flex items-center gap-2">
               <Briefcase className="h-5 w-5" />
               Career Explorer
+            </TabsTrigger>
+            <TabsTrigger value="paths" className="flex items-center gap-2">
+              <GitBranch className="h-5 w-5" />
+              Career Paths
             </TabsTrigger>
           </TabsList>
 
@@ -109,6 +114,10 @@ const App = () => {
               initialSOC={selectedSOC}
               onSOCChange={setSelectedSOC}
             />
+          </TabsContent>
+
+          <TabsContent value="paths" className="space-y-6">
+            <CareerPathDiagram />
           </TabsContent>
         </Tabs>
 
