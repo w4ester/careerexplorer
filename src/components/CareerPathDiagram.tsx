@@ -8,7 +8,7 @@ mermaid.initialize({
   securityLevel: 'loose',
 });
 
-const CareerPathDiagram = () => {
+export const CareerPathDiagram: React.FC = () => {
   useEffect(() => {
     mermaid.contentLoaded();
   }, []);
@@ -63,5 +63,3 @@ const CareerPathDiagram = () => {
     </div>
   );
 };
-
-export default CareerPathDiagram;
